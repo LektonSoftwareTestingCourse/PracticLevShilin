@@ -1,0 +1,8 @@
+bin:              400000, 400002, 400004
+cardholder_name:  short, typical, max_length
+currency_code:    643, 840, 978
+daily_limit:      min, default, max
+monthly_limit:    low, default, high
+initial_balance:  zero, default, high
+
+IF [daily_limit] = "max" THEN [monthly_limit] <> "low";
