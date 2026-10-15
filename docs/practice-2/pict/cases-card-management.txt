@@ -1,0 +1,16 @@
+bin	cardholder_name	currency_code	daily_limit	monthly_limit	initial_balance
+400002	max_length	643	min	low	high
+400000	short	978	max	default	zero
+400000	typical	840	min	high	default
+400002	typical	643	max	default	default
+400000	max_length	643	default	high	zero
+400004	max_length	978	default	low	default
+400004	short	978	min	high	high
+400002	typical	978	default	low	zero
+400004	max_length	840	max	default	high
+400002	short	840	default	default	high
+400000	typical	840	default	low	high
+400004	typical	840	max	high	zero
+400004	short	643	default	low	default
+400004	typical	840	min	default	zero
+400002	typical	978	min	high	zero
