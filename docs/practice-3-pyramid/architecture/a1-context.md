@@ -1,6 +1,16 @@
 # А1. C4 Level 1 — Context
 
 ```mermaid
+
+---
+config:
+  flowchart:
+    nodeSpacing: 90
+    rankSpacing: 130
+    curve: basis
+  theme: dark
+---
+
 flowchart LR
     T["Внешняя система: терминал<br/>На стенде Terminal Simulator"]
     M["Внешняя система: мерчант / эквайрер<br/>На стенде Merchant Acquirer"]
