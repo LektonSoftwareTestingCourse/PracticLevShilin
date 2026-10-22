@@ -1,15 +1,12 @@
 # А1. C4 Level 1 — Context
 
 ```mermaid
-
-%%{init: {"flowchart": {"nodeSpacing": 90, "rankSpacing": 130, "curve": "basis"}, "theme": "dark"}}%%
-
 flowchart LR
-    T["Внешняя система: терминал<br/>На стенде Terminal Simulator"]
-    M["Внешняя система: мерчант / эквайрер<br/>На стенде Merchant Acquirer"]
-    U["Человек: пользователь дашборда"]
-    S["Система СМП<br/>Авторизация, карты, журнал, уведомления, Dashboard"]
-    B["Внешняя система: BIN Lookup<br/>На стенде локальный HTTP stub"]
+    T["Terminal Simulator"]
+    M["Merchant Acquirer"]
+    U["Пользователь"]
+    S["СМП"]
+    B["BIN Lookup"]
     
     T -->|"sync HTTP/JSON: POST /api/transactions"| S
     
