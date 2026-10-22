@@ -2,14 +2,7 @@
 
 ```mermaid
 
----
-config:
-  flowchart:
-    nodeSpacing: 90
-    rankSpacing: 130
-    curve: basis
-  theme: dark
----
+%%{init: {"flowchart": {"nodeSpacing": 90, "rankSpacing": 130, "curve": "basis"}, "theme": "dark"}}%%
 
 flowchart LR
     T["Внешняя система: терминал<br/>На стенде Terminal Simulator"]
