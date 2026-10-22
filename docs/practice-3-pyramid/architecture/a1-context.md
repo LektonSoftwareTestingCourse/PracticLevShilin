@@ -28,3 +28,9 @@ flowchart LR
 | СМП → эквайрер | [MerchantAcquirerClient.java](../../../services/switch/src/main/java/com/processing/service/MerchantAcquirerClient.java): HTTP POST `/api/simulator/merchant/fee`                                                                                                                                                                           |
 | Пользователь → Dashboard → API; обратный WebSocket | [nginx.conf](../../../services/dashboard/nginx.conf): HTTP proxy `/api/` и WebSocket upgrade `/ws/`; [WebSocketConfig.java](../../../services/transaction-logger/src/main/java/com/processing/transactionlogger/websocket/WebSocketConfig.java): регистрация endpoint                                                                           |
 | СМП → внешний BIN | [BinLookupClient.java](../../../services/authorization/src/main/java/com/processing/authorization/client/BinLookupClient.java): `getIssuerId()`; [BinLookupController.java](../../../services/bin-lookup/src/main/java/com/processing/binlookup/controller/BinLookupController.java): локальная статическая таблица для эмуляции внешнего API `/api/bin`|
+
+#### Чего не хватало: 
+в проекте отсутствовала отдельная C4 Context-диаграмма, явно показывающая границы СМП и взаимодействие с внешними системами.
+
+#### Что улучшено: 
+СМП представлена как единая система, выделены внешние участники (терминал, мерчант/эквайер, пользователь Dashboard, BIN Lookup), указаны направления взаимодействий и протоколы (HTTP/REST, WebSocket).
