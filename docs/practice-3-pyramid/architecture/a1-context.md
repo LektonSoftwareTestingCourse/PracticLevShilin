@@ -7,11 +7,17 @@ flowchart LR
     U["Человек: пользователь дашборда"]
     S["Система СМП<br/>Авторизация, карты, журнал, уведомления, Dashboard"]
     B["Внешняя система: BIN Lookup<br/>На стенде локальный HTTP stub"]
+    
     T -->|"sync HTTP/JSON: POST /api/transactions"| S
+    
     M -->|"sync HTTP/JSON: POST /api/transactions"| S
+    
     S -->|"sync HTTP/JSON: запрос комиссии эквайреру"| M
+    
     U -->|"sync HTTP через Dashboard"| S
+    
     S ==>|"async WebSocket: обновления /ws/transactions"| U
+    
     S -->|"sync HTTP GET /api/bin/{bin}"| B
 ```
 
