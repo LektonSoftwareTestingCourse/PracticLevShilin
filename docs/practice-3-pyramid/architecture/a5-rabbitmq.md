@@ -62,4 +62,3 @@ flowchart TB
 3. **Consumer retry** — в декларации очередей указан x-max-delivery=3, но в [application.yaml](../../../services/transaction-logger/src/main/resources/application.yaml) и [application.yml](../../../services/notification-service/src/main/resources/application.yml) не задан listener retry с тремя попытками и recovery policy. Один аргумент очереди не является доказательством настроенной Spring retry-цепочки. Переход в DLQ после ровно трёх неуспешных обработок необходимо проверять отдельным интеграционным сценарием; не считать его уже гарантированным.
 
 **TTL 60s относится к сообщениям в DLQ**, а не к задержке перед повтором основной очереди. Обратного binding DLQ → основная очередь в конфигурации нет. Диагностику DLQ нужно проводить до истечения TTL. Наличие маршрута в DLX не означает, что всякая ошибка listener автоматически приводит туда.
-
