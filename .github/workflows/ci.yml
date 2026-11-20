@@ -72,6 +72,7 @@ jobs:
     needs: [ base-lint, build-common ]
 
     strategy:
+      fail-fast: false
       matrix:
         service: [ gateway, switch, authorization, card-management, terminal-simulator, merchant-acquirer, transaction-logger ]
 
@@ -89,8 +90,16 @@ jobs:
     - name: Run java linter
       run: mvn -f services/pom.xml -P${{ matrix.service }} checkstyle:check
 
-    - name: Build services (tests skipped until students add them)
-      run: mvn -f services/pom.xml -P${{ matrix.service }} install -Dcheckstyle.skip=true -DskipTests
+    - name: Verify services and unit tests
+      run: mvn -B -f services/pom.xml -P${{ matrix.service }} verify -Dcheckstyle.skip=true
+
+    - name: Upload JaCoCo report
+      if: ${{ always() && contains(fromJSON('["gateway", "switch", "authorization", "card-management"]'), matrix.service) }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: jacoco-report-${{ matrix.service }}
+        path: services/${{ matrix.service }}/target/site/jacoco/
+        if-no-files-found: error
 
   frontend-dashboard:
     runs-on: ubuntu-latest
