@@ -119,4 +119,4 @@
 .\scripts\practice-5-mutations.ps1
 ```
 
-Если `mvn` отсутствует в PATH, укажите `-Maven` с путём до `mvn.cmd`. Для основного скрипта используется JDK 21 и Docker Compose. Прямой запуск Maven пишет отчёты в `services/api-tests/target/surefire-reports`. Скрипт сохраняет результаты в `services/api-tests/target/evidence`, журналы мутаций находятся в `services/api-tests/target/mutations`. GitHub Actions автоматически запускается в ветках `practice-5-*`, при изменениях в PR и вручную. Ссылку на реальный прогон и текст отчёта добавляют в Issue с меткой `practice-5` после проверки работы.
+Для основного скрипта используется JDK 21 и Docker Compose. Прямой запуск Maven пишет отчёты в `services/api-tests/target/surefire-reports`. Скрипт сохраняет результаты в `services/api-tests/target/evidence`, журналы мутаций находятся в `services/api-tests/target/mutations`. GitHub Actions автоматически запускается в ветках `practice-5-*`, при изменениях в PR и вручную. 
