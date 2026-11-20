@@ -27,6 +27,7 @@ Thumbs.db
 *.iml
 
 # Maven
+.m2-api/
 .mvn
 mvnw
 mvnw.cmd
