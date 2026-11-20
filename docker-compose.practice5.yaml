@@ -1,0 +1,98 @@
+# Optional isolated failure paths. Main services keep running with their normal settings.
+services:
+  practice5-cms-stub:
+    profiles: [practice5]
+    image: nginx:1.28-alpine
+    volumes:
+      - ./scripts/practice-5-fixtures/cms.conf:/etc/nginx/conf.d/default.conf:ro
+    networks: [smp-network]
+  practice5-auth-fault:
+    profiles: [practice5]
+    image: ghcr.io/${GHCR_USER:-local}/smp-authorization:latest
+    ports: ["18083:8080"]
+    environment: &practice5-auth-env
+      SERVER_PORT: 8080
+      CARD_MGMT_URL: http://practice5-cms-stub
+      BIN_LOOKUP_URL: http://bin-lookup:8080
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_PORT: ${DB_PORT}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      SPRING_FLYWAY_ENABLED: "false"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+    networks: [smp-network]
+    healthcheck:
+      disable: true
+  practice5-auth-readonly:
+    profiles: [practice5]
+    image: ghcr.io/${GHCR_USER:-local}/smp-authorization:latest
+    ports: ["18084:8080"]
+    environment:
+      <<: *practice5-auth-env
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?options=-c%20default_transaction_read_only%3Don
+    networks: [smp-network]
+    healthcheck:
+      disable: true
+  practice5-logger-readonly:
+    profiles: [practice5]
+    image: ghcr.io/${GHCR_USER:-local}/smp-transaction-logger:latest
+    ports: ["18088:8080"]
+    environment:
+      SERVER_PORT: 8080
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_PORT: ${DB_PORT}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      SPRING_FLYWAY_ENABLED: "false"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?options=-c%20default_transaction_read_only%3Don
+      SPRING_RABBITMQ_LISTENER_SIMPLE_AUTO_STARTUP: "false"
+      MANAGEMENT_HEALTH_RABBIT_ENABLED: "false"
+    networks: [smp-network]
+    healthcheck:
+      disable: true
+  practice5-switch-fault:
+    profiles: [practice5]
+    image: ghcr.io/${GHCR_USER:-local}/smp-switch:latest
+    ports: ["18082:8080"]
+    environment:
+      SERVER_PORT: 8080
+      AUTH_URL: http://authorization:8080
+      LOGGER_URL: http://transaction-logger:8080
+      MERCHANT_URL: http://merchant-acquirer:8080
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 1
+    networks: [smp-network]
+    healthcheck:
+      disable: true
+  practice5-gateway-fault:
+    profiles: [practice5]
+    image: ghcr.io/${GHCR_USER:-local}/smp-gateway:latest
+    ports: ["18080:8080"]
+    environment:
+      SERVER_PORT: 8080
+      SWITCH_URL: http://practice5-switch-fault:8080
+      AUTH_URL: http://authorization:8080
+      CARD_MGMT_URL: http://card-management:8080
+      LOGGER_URL: http://transaction-logger:8080
+      TERMINAL_SIM_URL: http://terminal-simulator:8080
+      MERCHANT_SIM_URL: http://merchant-acquirer:8080
+    networks: [smp-network]
+    healthcheck:
+      disable: true
+  practice5-gateway-unavailable:
+    profiles: [practice5]
+    image: ghcr.io/${GHCR_USER:-local}/smp-gateway:latest
+    ports: ["18090:8080"]
+    environment:
+      SERVER_PORT: 8080
+      SWITCH_URL: http://localhost:1
+      AUTH_URL: http://authorization:8080
+      CARD_MGMT_URL: http://card-management:8080
+      LOGGER_URL: http://transaction-logger:8080
+      TRANSACTIONS_RATE_LIMIT_CAPACITY: 1
+      TRANSACTIONS_RATE_LIMIT_REFILL_PER_SECOND: 1
+    networks: [smp-network]
+    healthcheck:
+      disable: true
